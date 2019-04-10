@@ -12,11 +12,12 @@ from developer.models import Developer
 
 
 def check_if_developerExist(developer_id):
+    status_code = 0
     try:
-        Developer.objects.get (pk=developer_id)
-    except Developer.DoesNotExist:
-        raise ObjectDoesNotExist('message')
-
+        if developer_id and developer_id is not None:
+            Developer.objects.get(pk=developer_id)
+    except ObjectDoesNotExist:
+        pass
 
 class ExperienceListCreate(APIView):
 
@@ -50,10 +51,8 @@ class ExperienceDetailsAPIView(APIView):
 
     def get(self, request, pk, format=None):
         experience = self.get_object(pk)
-        serializer = ExperienceSerializer(data=experience, many=True)
-        if serializer.is_valid():
-            return Response(serializer.data, status=status.HTTP_200_OK)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer = ExperienceSerializer(experience)
+        return Response(serializer.data)
 
     def put(self, request, pk, format=None):
         experience = self.get_object(pk)
