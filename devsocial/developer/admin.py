@@ -18,7 +18,8 @@ class UserCreationForm(forms.ModelForm):
 
     class Meta:
         model = Developer
-        fields = ('firstname', 'lastname', 'email', 'password', 'date_of_birth')
+        # fields = ('firstname', 'lastname', 'email', 'password', 'mobile', 'date_of_birth')
+        fields = '__all__'
 
     def clean_password2(self):
         # check that the password entries match
@@ -30,7 +31,7 @@ class UserCreationForm(forms.ModelForm):
 
     def save(self, commit=True):
         # Save the provided password in hash format
-        user = super().save(commit=False)
+        user = super(UserCreationForm).save(commit=False)
         user.set_password(self.cleaned_data["password1"])
         if commit:
             user.save()
@@ -46,7 +47,8 @@ class UserChangeForm(forms.ModelForm):
 
     class Meta:
         model = Developer
-        fields = ('email', 'password', 'date_of_birth', 'firstname', 'lastname', 'is_active', 'is_admin')
+        # fields = ('email', 'password', 'date_of_birth', 'mobile', 'firstname', 'lastname')
+        fields = '__all__'
 
     def clean_password(self):
         # Regardless of what the user provides, return the initial value
@@ -62,13 +64,13 @@ class DeveloperAdmin(BaseUserAdmin):
     # The fields to be used in displaying the User model.
     # These override the definitions on the base UserAdmin
     # that reference specific fields on auth.User.
-    list_display = ('id','firstname', 'lastname', 'email', 'created_at', 'updated_at')
+    list_display = ('id','firstname', 'lastname', 'email', 'mobile', 'created_at', 'updated_at')
     list_display_links = ('id', 'email', 'created_at', 'updated_at')
     list_filter = ('created_at', 'email', 'is_admin')
 
     fieldsets = (
         (None, {'fields': ('email', 'password')}),
-        ('Personal info', {'fields': ('date_of_birth', 'firstname', 'lastname')}),
+        ('Personal info', {'fields': ('date_of_birth', 'firstname', 'lastname', 'mobile')}),
         ('Permissions', {'fields': ('is_admin',)}),
     )
     # add_fieldsets is not a standard ModelAdmin attribute. UserAdmin
@@ -76,7 +78,7 @@ class DeveloperAdmin(BaseUserAdmin):
     add_fieldsets = (
         (None, {
             'classes': ('wide',),
-            'fields': ('email', 'date_of_birth', 'password1', 'password2')}
+            'fields': ('email', 'date_of_birth', 'firstname', 'lastname','password1', 'password2', 'mobile')}
          ),
     )
     search_fields = ('firstname', 'lastname', 'email')

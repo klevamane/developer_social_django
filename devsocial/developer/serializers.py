@@ -9,3 +9,7 @@ class DeveloperSerializer(serializers.ModelSerializer):
     class Meta:
         fields = '__all__'
         model = Developer
+        read_only_fields = ('is_admin', 'is_active', 'last_login')
+
+    def create(self, validated_data):
+        return Developer.objects.create_user(**validated_data)
