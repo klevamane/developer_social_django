@@ -5,6 +5,8 @@
 
 ## IDE
 .idea
+..idea
+ ../.idea/workspace.xml
 ### Django ###
 *.log
 *.pot
